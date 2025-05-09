@@ -27,6 +27,10 @@
           makeFlags = [ "CC:=$(CC)" ];
 
           postPatch = "sed -i '/chmod u+s/d' Makefile";
+
+          meta = {
+            mainProgram = "slock";
+          };
         };
     };
 }
