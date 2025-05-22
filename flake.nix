@@ -1,5 +1,5 @@
 {
-  description = "slock-1.5";
+  description = "slock";
 
   inputs.nixpkgs.url = "nixpkgs/nixpkgs-unstable";
 
