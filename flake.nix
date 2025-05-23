@@ -5,9 +5,16 @@
 
   outputs =
     { self, nixpkgs }:
+    let
+      system = "x86_64-linux";
+      pkgs = import nixpkgs { inherit system; };
+      configFile = import ./config.nix {
+        inherit pkgs;
+      };
+    in
     {
-      defaultPackage.x86_64-linux =
-        with import nixpkgs { system = "x86_64-linux"; };
+      defaultPackage.${system} =
+        with pkgs;
         stdenv.mkDerivation {
           name = "slock";
           version = "1.5";
@@ -22,9 +29,12 @@
             libxcrypt
           ];
 
+          makeFlags = [ "CC:=$(CC)" ];
           installFlags = [ "PREFIX=$(out)" ];
 
-          makeFlags = [ "CC:=$(CC)" ];
+          prePatch = ''
+            cp ${configFile} config.def.h
+          '';
 
           postPatch = "sed -i '/chmod u+s/d' Makefile";
 
